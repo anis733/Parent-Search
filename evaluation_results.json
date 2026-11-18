@@ -1,0 +1,144 @@
+{
+  "metrics": {
+    "tfidf": {
+      "precision_at_5": 0.8,
+      "precision_at_10": 0.7667,
+      "recall_at_5": 0.1626,
+      "recall_at_10": 0.2557,
+      "f1_score": 0.3835,
+      "average_precision": 0.2329,
+      "map": 0.2329
+    },
+    "bm25": {
+      "precision_at_5": 0.8167,
+      "precision_at_10": 0.775,
+      "recall_at_5": 0.1652,
+      "recall_at_10": 0.2369,
+      "f1_score": 0.3629,
+      "average_precision": 0.2282,
+      "map": 0.2282
+    }
+  },
+  "queries": [
+    {
+      "query": "cara merawat bayi baru lahir",
+      "num_relevant": 87,
+      "tfidf_p5": 0.6,
+      "tfidf_p10": 0.7,
+      "tfidf_ap": 0.0515,
+      "bm25_p5": 0.6,
+      "bm25_p10": 0.8,
+      "bm25_ap": 0.0647
+    },
+    {
+      "query": "MPASI pertama untuk bayi 6 bulan",
+      "num_relevant": 43,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.2326,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.2326
+    },
+    {
+      "query": "jadwal imunisasi vaksinasi anak",
+      "num_relevant": 6,
+      "tfidf_p5": 0.6,
+      "tfidf_p10": 0.4,
+      "tfidf_ap": 0.5694,
+      "bm25_p5": 0.6,
+      "bm25_p10": 0.4,
+      "bm25_ap": 0.6111
+    },
+    {
+      "query": "stimulasi perkembangan motorik balita",
+      "num_relevant": 32,
+      "tfidf_p5": 0.8,
+      "tfidf_p10": 0.8,
+      "tfidf_ap": 0.2267,
+      "bm25_p5": 1.0,
+      "bm25_p10": 0.8,
+      "bm25_ap": 0.229
+    },
+    {
+      "query": "tips menyusui dan manajemen ASI eksklusif",
+      "num_relevant": 297,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.0337,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.0337
+    },
+    {
+      "query": "cara mengatasi tantrum pada balita",
+      "num_relevant": 2,
+      "tfidf_p5": 0.0,
+      "tfidf_p10": 0.0,
+      "tfidf_ap": 0.0,
+      "bm25_p5": 0.0,
+      "bm25_p10": 0.0,
+      "bm25_ap": 0.0
+    },
+    {
+      "query": "tanda bahaya dehidrasi dan diare anak",
+      "num_relevant": 36,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.2778,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.2778
+    },
+    {
+      "query": "nutrisi dan gizi seimbang tumbuh kembang",
+      "num_relevant": 68,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.1471,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.1471
+    },
+    {
+      "query": "penanganan demam dan kejang demam anak",
+      "num_relevant": 56,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.1786,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.1786
+    },
+    {
+      "query": "posisi dan pola tidur bayi aman",
+      "num_relevant": 81,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 0.9,
+      "tfidf_ap": 0.1111,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.1235
+    },
+    {
+      "query": "perkembangan bahasa dan bicara speech delay",
+      "num_relevant": 110,
+      "tfidf_p5": 1.0,
+      "tfidf_p10": 1.0,
+      "tfidf_ap": 0.0909,
+      "bm25_p5": 1.0,
+      "bm25_p10": 1.0,
+      "bm25_ap": 0.0909
+    },
+    {
+      "query": "dampak screen time gadget bagi anak",
+      "num_relevant": 4,
+      "tfidf_p5": 0.6,
+      "tfidf_p10": 0.4,
+      "tfidf_ap": 0.875,
+      "bm25_p5": 0.6,
+      "bm25_p10": 0.3,
+      "bm25_ap": 0.75
+    }
+  ]
+}

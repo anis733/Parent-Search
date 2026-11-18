@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Perbandingan Algoritma — ParentSearch{% endblock %}
+
+{% block content %}
+<section class="compare-section">
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-chart-bar"></i> Perbandingan Performa Algoritma</h1>
+            <p class="page-desc">Evaluasi komparatif antara <strong>TF-IDF (Cosine Similarity)</strong> dan <strong>Okapi BM25</strong> pada 300 korpus riil dokumen Panduan Parenting & Tumbuh Kembang Anak.</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="metrics-summary">
+            <div class="metric-card tfidf-card">
+                <div class="metric-card-header">
+                    <i class="fas fa-vector-square"></i>
+                    <div>
+                        <h3>TF-IDF (Cosine)</h3>
+                        <small>Vector Space Model</small>
+                    </div>
+                </div>
+                <div class="metric-card-body">
+                    <div class="metric-item">
+                        <span class="metric-label">MAP</span>
+                        <span class="metric-value">{{ "%.4f"|format(eval_data.metrics.tfidf.map) }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">P@10</span>
+                        <span class="metric-value">{{ "%.2f%%"|format(eval_data.metrics.tfidf.precision_at_10 * 100) }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">F1-Score</span>
+                        <span class="metric-value">{{ "%.4f"|format(eval_data.metrics.tfidf.f1_score) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vs-badge">VS</div>
+
+            <div class="metric-card bm25-card">
+                <div class="metric-card-header">
+                    <i class="fas fa-calculator"></i>
+                    <div>
+                        <h3>Okapi BM25</h3>
+                        <small>Probabilistic Model</small>
+                    </div>
+                </div>
+                <div class="metric-card-body">
+                    <div class="metric-item">
+                        <span class="metric-label">MAP</span>
+                        <span class="metric-value">{{ "%.4f"|format(eval_data.metrics.bm25.map) }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">P@10</span>
+                        <span class="metric-value">{{ "%.2f%%"|format(eval_data.metrics.bm25.precision_at_10 * 100) }}</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">F1-Score</span>
+                        <span class="metric-value">{{ "%.4f"|format(eval_data.metrics.bm25.f1_score) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Charts Section -->
+        <div class="charts-grid">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-bar"></i> Perbandingan Metrik Evaluasi</h3>
+                    <span class="chart-badge">P@k, R@k, F1, MAP</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="metricsBarChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h3><i class="fas fa-chart-pie"></i> Radar Performa Multi-Dimensi</h3>
+                    <span class="chart-badge">6 Sumbu Evaluasi</span>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="metricsRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Per-query AP chart -->
+        <div class="chart-card chart-full">
+            <div class="chart-header">
+                <h3><i class="fas fa-chart-line"></i> Average Precision per Kueri Uji (12 Benchmark Queries)</h3>
+                <span class="chart-badge">Tingkat Akurasi per Kasus</span>
+            </div>
+            <div class="chart-wrapper chart-wrapper-full">
+                <canvas id="perQueryChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Detailed Metrics Table -->
+        <div class="compare-table-wrapper">
+            <h2 class="section-title"><i class="fas fa-table"></i> Tabel Detail Metrik Evaluasi</h2>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Metrik Evaluasi</th>
+                        <th class="tfidf-col">TF-IDF (Cosine)</th>
+                        <th class="bm25-col">Okapi BM25</th>
+                        <th>Selisih Mutlak</th>
+                        <th>Kinerja Unggul</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set metrics_list = [
+                        ('Precision@5', eval_data.metrics.tfidf.precision_at_5, eval_data.metrics.bm25.precision_at_5),
+                        ('Precision@10', eval_data.metrics.tfidf.precision_at_10, eval_data.metrics.bm25.precision_at_10),
+                        ('Recall@5', eval_data.metrics.tfidf.recall_at_5, eval_data.metrics.bm25.recall_at_5),
+                        ('Recall@10', eval_data.metrics.tfidf.recall_at_10, eval_data.metrics.bm25.recall_at_10),
+                        ('F1-Score', eval_data.metrics.tfidf.f1_score, eval_data.metrics.bm25.f1_score),
+                        ('Average Precision', eval_data.metrics.tfidf.average_precision, eval_data.metrics.bm25.average_precision),
+                        ('MAP (Mean AP)', eval_data.metrics.tfidf.map, eval_data.metrics.bm25.map)
+                    ] %}
+                    {% for name, tfidf_val, bm25_val in metrics_list %}
+                    <tr>
+                        <td><strong>{{ name }}</strong></td>
+                        <td class="tfidf-col"><strong>{{ "%.4f"|format(tfidf_val) }}</strong> ({{ "%.1f%%"|format(tfidf_val*100) }})</td>
+                        <td class="bm25-col"><strong>{{ "%.4f"|format(bm25_val) }}</strong> ({{ "%.1f%%"|format(bm25_val*100) }})</td>
+                        <td>{{ "%.4f"|format((bm25_val - tfidf_val)|abs) }}</td>
+                        <td>
+                            {% if bm25_val > tfidf_val %}
+                                <span class="badge badge-bm25"><i class="fas fa-trophy"></i> Okapi BM25 (+{{ "%.2f%%"|format((bm25_val - tfidf_val)*100) }})</span>
+                            {% elif tfidf_val > bm25_val %}
+                                <span class="badge badge-tfidf"><i class="fas fa-trophy"></i> TF-IDF (+{{ "%.2f%%"|format((tfidf_val - bm25_val)*100) }})</span>
+                            {% else %}
+                                <span class="badge badge-tie"><i class="fas fa-equals"></i> Seimbang</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const evalData = {{ eval_data | tojson }};
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            initComparisonCharts(evalData);
+        });
+    } else {
+        initComparisonCharts(evalData);
+    }
+</script>
+{% endblock %}

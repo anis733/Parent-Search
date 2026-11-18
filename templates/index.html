@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}ParentSearch — Mesin Pencari Panduan Parenting & Tumbuh Kembang Anak{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+    <div class="container hero-content">
+        <div class="hero-icon">👶🍼</div>
+        <h1 class="hero-title">Mesin Pencari <span class="highlight">Panduan Parenting</span></h1>
+        <p class="hero-subtitle">Temukan artikel dan panduan terpercaya tentang tumbuh kembang anak, nutrisi, vaksinasi, dan tips parenting lainnya.</p>
+
+        <form action="{{ url_for('search') }}" method="GET" class="search-form" id="searchForm">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    name="q" 
+                    id="searchInput"
+                    placeholder="Cari panduan parenting... (mis: MPASI, vaksinasi, ASI eksklusif)" 
+                    autocomplete="off"
+                    required
+                >
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+
+            <div class="search-options">
+                <div class="algo-selector">
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="tfidf" checked>
+                        <span class="algo-label">
+                            <i class="fas fa-vector-square"></i> TF-IDF
+                        </span>
+                    </label>
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="bm25">
+                        <span class="algo-label">
+                            <i class="fas fa-calculator"></i> BM25
+                        </span>
+                    </label>
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="both">
+                        <span class="algo-label">
+                            <i class="fas fa-columns"></i> Keduanya
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-search">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+        </form>
+
+        {% if error %}
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i> {{ error }}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Fitur Utama</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-search"></i></div>
+                <h3>Pencarian Cerdas</h3>
+                <p>Gunakan algoritma TF-IDF dan BM25 untuk menemukan artikel yang paling relevan dengan kebutuhan Anda.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                <h3>Perbandingan Algoritma</h3>
+                <p>Bandingkan performa kedua algoritma retrieval secara visual dengan metrik evaluasi lengkap.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-baby"></i></div>
+                <h3>Konten Parenting</h3>
+                <p>Ratusan artikel tentang tumbuh kembang anak, nutrisi, vaksinasi, dan tips parenting terpercaya.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="popular-topics">
+    <div class="container">
+        <h2 class="section-title">Topik Populer</h2>
+        <div class="topics-grid">
+            <a href="{{ url_for('search', q='ASI eksklusif', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-baby-carriage"></i> ASI Eksklusif
+            </a>
+            <a href="{{ url_for('search', q='MPASI bayi 6 bulan', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-utensils"></i> MPASI
+            </a>
+            <a href="{{ url_for('search', q='vaksinasi anak', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-syringe"></i> Vaksinasi
+            </a>
+            <a href="{{ url_for('search', q='perkembangan motorik', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-running"></i> Motorik
+            </a>
+            <a href="{{ url_for('search', q='nutrisi anak', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-apple-alt"></i> Nutrisi Anak
+            </a>
+            <a href="{{ url_for('search', q='pola tidur bayi', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-moon"></i> Pola Tidur
+            </a>
+            <a href="{{ url_for('search', q='stimulasi anak usia dini', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-brain"></i> Stimulasi
+            </a>
+            <a href="{{ url_for('search', q='mengatasi anak tantrum', algorithm='tfidf') }}" class="topic-tag">
+                <i class="fas fa-heart"></i> Tantrum
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

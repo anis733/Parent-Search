@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}Hasil Pencarian: {{ query }} — ParentSearch{% endblock %}
+
+{% block content %}
+<section class="results-section">
+    <div class="container">
+        <!-- Search bar (compact) -->
+        <form action="{{ url_for('search') }}" method="GET" class="search-form search-form-compact" id="searchForm">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    name="q" 
+                    id="searchInput"
+                    value="{{ query }}"
+                    placeholder="Cari panduan parenting..."
+                    autocomplete="off"
+                    required
+                >
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+            <div class="search-options search-options-inline">
+                <div class="algo-selector">
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="tfidf" {{ 'checked' if algorithm == 'tfidf' }} onchange="this.form.submit()">
+                        <span class="algo-label"><i class="fas fa-vector-square"></i> TF-IDF</span>
+                    </label>
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="bm25" {{ 'checked' if algorithm == 'bm25' }} onchange="this.form.submit()">
+                        <span class="algo-label"><i class="fas fa-calculator"></i> BM25</span>
+                    </label>
+                    <label class="algo-option">
+                        <input type="radio" name="algorithm" value="both" {{ 'checked' if algorithm == 'both' }} onchange="this.form.submit()">
+                        <span class="algo-label"><i class="fas fa-columns"></i> Keduanya</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-search btn-sm">
+                    <i class="fas fa-search"></i> Cari
+                </button>
+            </div>
+        </form>
+
+        <!-- Algorithm Mode Banner -->
+        <div class="algo-banner {% if algorithm == 'tfidf' %}banner-tfidf{% elif algorithm == 'bm25' %}banner-bm25{% else %}banner-both{% endif %}">
+            <div class="banner-content">
+                <i class="{% if algorithm == 'tfidf' %}fas fa-vector-square{% elif algorithm == 'bm25' %}fas fa-calculator{% else %}fas fa-columns{% endif %} banner-icon"></i>
+                <div>
+                    <strong>Mode Aktif: 
+                        {% if algorithm == 'tfidf' %}
+                            TF-IDF (Vector Space Model & Cosine Similarity)
+                        {% elif algorithm == 'bm25' %}
+                            Okapi BM25 (Probabilistic Retrieval Model)
+                        {% else %}
+                            Komparasi Side-by-Side: TF-IDF vs Okapi BM25
+                        {% endif %}
+                    </strong>
+                    <span class="banner-subtext">
+                        Kueri: "<strong>{{ query }}</strong>" &bull; Waktu Komputasi: <strong>{{ search_time }} detik</strong> &bull; 
+                        {% if algorithm == 'both' %}
+                            {{ results_tfidf|length }} hasil TF-IDF + {{ results_bm25|length }} hasil BM25
+                        {% elif results_tfidf %}
+                            {{ results_tfidf|length }} dokumen ditemukan
+                        {% else %}
+                            {{ results_bm25|length }} dokumen ditemukan
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            {% if algorithm != 'both' %}
+                <a href="{{ url_for('search', q=query, algorithm='both') }}" class="btn-compare-switch">
+                    <i class="fas fa-columns"></i> Bandingkan Keduanya
+                </a>
+            {% endif %}
+        </div>
+
+        {% if algorithm == 'both' %}
+        <!-- Side-by-side comparison mode -->
+        <div class="results-comparison">
+            <!-- Kolom TF-IDF -->
+            <div class="results-column">
+                <div class="column-header tfidf-header">
+                    <div class="col-title"><i class="fas fa-vector-square"></i> Ranking TF-IDF (Cosine)</div>
+                    <span class="col-badge">{{ results_tfidf|length }} hasil</span>
+                </div>
+                {% if results_tfidf %}
+                    {% for result in results_tfidf %}
+                    <div class="result-card card-tfidf">
+                        <div class="result-rank rank-tfidf">#{{ result.rank }}</div>
+                        <div class="result-body">
+                            <h3 class="result-title">
+                                <a href="{{ result.url if result.url else '#' }}" target="_blank" rel="noopener">
+                                    {{ result.title }} <i class="fas fa-external-link-alt title-ext-icon"></i>
+                                </a>
+                            </h3>
+                            <p class="result-snippet">{{ result.snippet }}</p>
+                            <div class="result-meta-info">
+                                <span class="badge-algo-tag tag-tfidf">
+                                    <i class="fas fa-vector-square"></i> Skor TF-IDF: <strong>{{ "%.4f"|format(result.score) }}</strong>
+                                </span>
+                                <span class="result-source">
+                                    <i class="fas fa-globe"></i> {{ result.source }}
+                                </span>
+                                <span class="result-docid">
+                                    <i class="fas fa-file-alt"></i> {{ result.doc_id }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Tidak ada hasil relevan ditemukan.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Kolom BM25 -->
+            <div class="results-column">
+                <div class="column-header bm25-header">
+                    <div class="col-title"><i class="fas fa-calculator"></i> Ranking Okapi BM25</div>
+                    <span class="col-badge">{{ results_bm25|length }} hasil</span>
+                </div>
+                {% if results_bm25 %}
+                    {% for result in results_bm25 %}
+                    <div class="result-card card-bm25">
+                        <div class="result-rank rank-bm25">#{{ result.rank }}</div>
+                        <div class="result-body">
+                            <h3 class="result-title">
+                                <a href="{{ result.url if result.url else '#' }}" target="_blank" rel="noopener">
+                                    {{ result.title }} <i class="fas fa-external-link-alt title-ext-icon"></i>
+                                </a>
+                            </h3>
+                            <p class="result-snippet">{{ result.snippet }}</p>
+                            <div class="result-meta-info">
+                                <span class="badge-algo-tag tag-bm25">
+                                    <i class="fas fa-calculator"></i> Skor BM25: <strong>{{ "%.4f"|format(result.score) }}</strong>
+                                </span>
+                                <span class="result-source">
+                                    <i class="fas fa-globe"></i> {{ result.source }}
+                                </span>
+                                <span class="result-docid">
+                                    <i class="fas fa-file-alt"></i> {{ result.doc_id }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>Tidak ada hasil relevan ditemukan.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Single algorithm results -->
+        <div class="results-list">
+            {% set results = results_tfidf if results_tfidf else results_bm25 %}
+            {% if results %}
+                {% for result in results %}
+                <div class="result-card {% if algorithm == 'tfidf' %}card-tfidf{% else %}card-bm25{% endif %}">
+                    <div class="result-rank {% if algorithm == 'tfidf' %}rank-tfidf{% else %}rank-bm25{% endif %}">
+                        #{{ result.rank }}
+                    </div>
+                    <div class="result-body">
+                        <h3 class="result-title">
+                            <a href="{{ result.url if result.url else '#' }}" target="_blank" rel="noopener">
+                                {{ result.title }} <i class="fas fa-external-link-alt title-ext-icon"></i>
+                            </a>
+                        </h3>
+                        <p class="result-snippet">{{ result.snippet }}</p>
+                        <div class="result-meta-info">
+                            {% if algorithm == 'tfidf' %}
+                            <span class="badge-algo-tag tag-tfidf">
+                                <i class="fas fa-vector-square"></i> Skor TF-IDF (Cosine): <strong>{{ "%.4f"|format(result.score) }}</strong>
+                            </span>
+                            {% else %}
+                            <span class="badge-algo-tag tag-bm25">
+                                <i class="fas fa-calculator"></i> Skor Okapi BM25: <strong>{{ "%.4f"|format(result.score) }}</strong>
+                            </span>
+                            {% endif %}
+                            <span class="result-source">
+                                <i class="fas fa-globe"></i> {{ result.source }}
+                            </span>
+                            <span class="result-docid">
+                                <i class="fas fa-file-alt"></i> {{ result.doc_id }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>Tidak ada hasil ditemukan untuk "<strong>{{ query }}</strong>".</p>
+                    <p>Coba gunakan kata kunci umum seperti: <code>MPASI</code>, <code>nutrisi</code>, <code>imunisasi</code>, atau <code>tidur bayi</code>.</p>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

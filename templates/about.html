@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Tentang — ParentSearch{% endblock %}
+
+{% block content %}
+<section class="about-section">
+    <div class="container">
+        <div class="page-header">
+            <h1><i class="fas fa-info-circle"></i> Tentang ParentSearch</h1>
+            <p class="page-desc">Mesin Pencari Panduan Parenting & Tumbuh Kembang Anak</p>
+        </div>
+
+        <!-- Project Info -->
+        <div class="about-card">
+            <div class="about-icon"><i class="fas fa-project-diagram"></i></div>
+            <h2>Tentang Project</h2>
+            <p>
+                <strong>ParentSearch</strong> adalah mesin pencari khusus yang dirancang untuk membantu orang tua 
+                menemukan informasi dan panduan terpercaya tentang parenting dan tumbuh kembang anak. 
+                Sistem ini menggunakan dua algoritma information retrieval modern — 
+                <strong>TF-IDF (Term Frequency–Inverse Document Frequency)</strong> dengan Cosine Similarity 
+                dan <strong>Okapi BM25</strong> — untuk menemukan artikel yang paling relevan dari korpus 
+                dokumen parenting berbahasa Indonesia.
+            </p>
+        </div>
+
+        <!-- How it works -->
+        <div class="about-card">
+            <div class="about-icon"><i class="fas fa-cogs"></i></div>
+            <h2>Cara Kerja</h2>
+            <div class="how-it-works">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-spider"></i> Pengumpulan Data</h3>
+                        <p>Artikel dikumpulkan dari berbagai sumber parenting terpercaya melalui web crawler, kemudian disimpan dalam format JSON terstruktur.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-filter"></i> Preprocessing</h3>
+                        <p>Teks artikel melalui tahap preprocessing: tokenisasi, penghapusan stopwords Bahasa Indonesia, dan stemming menggunakan Sastrawi.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-database"></i> Indexing</h3>
+                        <p>Dokumen diindex menggunakan Inverted Index, TF-IDF Matrix, dan BM25 scores untuk pencarian yang cepat dan akurat.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-search"></i> Retrieval</h3>
+                        <p>Query pengguna diproses dan dicocokkan menggunakan algoritma TF-IDF atau BM25 untuk menemukan dokumen paling relevan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Algorithms -->
+        <div class="about-card">
+            <div class="about-icon"><i class="fas fa-brain"></i></div>
+            <h2>Algoritma yang Digunakan</h2>
+            <div class="algo-grid">
+                <div class="algo-info-card">
+                    <h3><i class="fas fa-vector-square"></i> TF-IDF + Cosine Similarity</h3>
+                    <p><strong>TF-IDF</strong> (Term Frequency–Inverse Document Frequency) adalah teknik pembobotan kata yang mengukur seberapa penting suatu kata dalam dokumen relatif terhadap seluruh koleksi. Dikombinasikan dengan <strong>Cosine Similarity</strong> untuk mengukur kesamaan antara vektor query dan vektor dokumen.</p>
+                    <ul>
+                        <li>TF mengukur frekuensi kata dalam dokumen</li>
+                        <li>IDF mengukur keunikan kata di seluruh koleksi</li>
+                        <li>Cosine Similarity menghitung sudut antara dua vektor</li>
+                    </ul>
+                </div>
+                <div class="algo-info-card">
+                    <h3><i class="fas fa-calculator"></i> Okapi BM25</h3>
+                    <p><strong>BM25</strong> (Best Matching 25) adalah fungsi ranking yang dikembangkan berdasarkan model probabilistik retrieval. BM25 mempertimbangkan panjang dokumen dan frekuensi term dengan saturasi, sehingga menghasilkan ranking yang lebih baik.</p>
+                    <ul>
+                        <li>Parameter k1 mengontrol saturasi frekuensi term</li>
+                        <li>Parameter b mengontrol normalisasi panjang dokumen</li>
+                        <li>Lebih robust terhadap variasi panjang dokumen</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team -->
+        <div class="about-card">
+            <div class="about-icon"><i class="fas fa-users"></i></div>
+            <h2>Kelompok 11</h2>
+            <p class="team-subtitle">Mata Kuliah Pengembangan Informasi — Semester 5</p>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>M. Anis Fathin</h3>
+                    <p class="member-role">Anggota Kelompok</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Muhammad Razi Siregar</h3>
+                    <p class="member-role">Anggota Kelompok</p>
+                </div>
+                <div class="team-member">
+                    <div class="member-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Fachraja Ramadhan Sukma</h3>
+                    <p class="member-role">Anggota Kelompok</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tech Stack -->
+        <div class="about-card">
+            <div class="about-icon"><i class="fas fa-layer-group"></i></div>
+            <h2>Teknologi</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <i class="fab fa-python"></i>
+                    <span>Python</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-flask"></i>
+                    <span>Flask</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-html5"></i>
+                    <span>HTML5</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-css3-alt"></i>
+                    <span>CSS3</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fab fa-js"></i>
+                    <span>JavaScript</span>
+                </div>
+                <div class="tech-item">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>Chart.js</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
